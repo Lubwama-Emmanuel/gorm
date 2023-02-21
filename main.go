@@ -2,10 +2,8 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 
-	"github.com/gollira/mux"
 	"gorm.io/gorm"
 )
 
@@ -22,23 +20,24 @@ func allUsers(w http.ResponseWriter, r *http.Request) {
 func createUser(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Endpoint for creating users")
 }
-func updateUser(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Endpoint for updating a user")
-}
 func deleteUser(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Endpoint for deleting a user")
 }
 
+// func intialMigration() {
+// 	gorm.Open()
+// }
+
 func HandleRequests() {
-	r := mux.NewRouter()
-	r.HandleFunc("/users", allUsers).Method("GET")
-	r.HandleFunc("/users/{name}", deleteUser).Method("DELETE")
-	r.HandleFunc("/users/{name}/{email}", createUser).Method("POST")
-	r.HandleFunc("/users/{name}/{email}", updateUser).Method("PUT")
-	log.Fatal(http.ListenAndServe(":8080", r))
+	http.HandleFunc("/users", allUsers)
+	http.HandleFunc("/users/{name}", deleteUser)
+	http.HandleFunc("/users/{name}/{email}", createUser)
+	_ = http.ListenAndServe(":8080", nil)
 
 }
 
 func main() {
+	fmt.Println("Started")
 
+	HandleRequests()
 }
